@@ -18,7 +18,7 @@ namespace CA1.Models
 
 		[Required]
 		[MaxLength(50)]
-		public string PassHash { get; set; }
+		public byte[] PassHash { get; set; }
 
 		public Guid? sessionId { get; set; }
 
