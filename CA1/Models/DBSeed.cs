@@ -14,6 +14,16 @@ namespace CA1.Models
 
         public void Seed()
         {
+            SeedProduct();
+            SeedUser();
+            dbContext.SaveChanges();
+
+        }
+
+
+
+        public void SeedProduct()
+        {
             dbContext.Add(new Product
             {
 
@@ -22,7 +32,7 @@ namespace CA1.Models
                 Img = "./img/chart.png",
                 Price = 12
             });
-
+            
             dbContext.Add(new Product
             {
 
@@ -58,20 +68,27 @@ namespace CA1.Models
                 Img = "./img/top.png",
                 Price = 12346
             });
+        }
 
+        public void SeedUser()
+        {
             // get a hash algorithm object
-            //HashAlgorithm sha = SHA256.Create();
-            //byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes("password1"));
+            HashAlgorithm sha = SHA256.Create();
 
+            string username = "user1";
+            string password = "password";
+            string combo = username + password;
+            byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(combo));
+           
             dbContext.Add(new User
             {
-
-                UserName = "user1",
-                PassHash = "password",
+                UserName = username,
+                PassHash = hash
             });
 
 
-            dbContext.SaveChanges();
+
+        
         }
 
     }
