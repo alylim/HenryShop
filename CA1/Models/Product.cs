@@ -10,6 +10,10 @@ namespace CA1.Models
         public Product()
         {
             Id = new Guid();
+            InventoryRecords = new List<InventoryRecord>();
+            Orders = new List<Order>();
+            ShopCartItems = new List<ShopCartItem>();
+            WishListItems = new List<WishListItem>();
         }
         public Guid Id { get; set; }
         [Required]
@@ -25,8 +29,7 @@ namespace CA1.Models
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ShopCartItem> ShopCartItems { get; set; }
         public virtual ICollection<InventoryRecord> InventoryRecords { get; set; }
-
-
+        public virtual ICollection<WishListItem> WishListItems { get; set; }
 
     }
 }

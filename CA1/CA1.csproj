@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\" />
+    <None Remove="SweetAlert" />
   </ItemGroup>
-
 </Project>

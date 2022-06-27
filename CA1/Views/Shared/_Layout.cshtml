@@ -1,24 +1,32 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-    @using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Mvc;
 @{
-   string sessionusername = (string)Context.Request.Cookies["Username"];
+    string sessionUserName = (string)Context.Request.Cookies["Username"];
+    string name = (string)Context.Request.Cookies["Name"];
+    string searchStr = (string)ViewBag.Searchstr;
+    string cartcount = Context.Request.Cookies["cartcount"];
 }
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CA1</title>
+    <link rel="icon" href="~/piggy.ico" />
+    <title>@ViewData["Title"] - Henry's E-Shop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-info border-bottom box-shadow mb-3 fixed-top">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Search" asp-action="Index">E-commerce</a>
+                <a class="navbar-brand text-white henry-font " asp-area="" asp-controller="Search" asp-action="Index">
+                    <img src="/img/piggy-bank.svg" />
+                    Henry's E-Shop
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,50 +34,85 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="navbar-nav flex-grow-1">
-                            @*rename controller name to direct to product page*@
-                            <a class="nav-link text-dark" asp-controller="Search"><i></i>Products</a>
+                            <a class="nav-link text-white" asp-controller="Search" asp-action="Index"><i></i>Products</a>
                         </li>
                     </ul>
-                    @*rename asp-controller and action to fit search logic*@
-                    <form class="form-inline my-2 my-lg-0" asp-controller="Search" asp-action="Index" style="padding-right: 35px;">
-                        @*rename name "searchStr" to fit search logic*@
-                        <input name="searchstr" type="text" class="form-control" placeholder="Search for a product...">
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
-                            <span class="fa-solid fa-magnifying-glass"></span>
-                        </button>
+                    @*Product Searchbar*@
+                    <form class="form-inline my-2 my-lg-0" style="padding-right: 35px;" action="/" method="post">
+                        <div class="input-group">
+                            <input class="form-control border-end-0 rounded border" type="search" value="@searchStr" name="searchstr" id="search-input">
+                            <span class="input-group-append">
+                                <button class="btn btn-outline-secondary search-btn bg-white border-start-0 border-bottom-0 border ms-n5" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
                     </form>
-                    <a style="padding-right:25px;" class="fa fa-cart-shopping"></a>
-                </div>
-                <div>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="LogIn" asp-action="Logout">
-                        @{
-                            if (!string.IsNullOrEmpty(@sessionusername))
-                            {
-                                @: Log Out
-                            }
-                            else
-                            {
-                                @: Log In
-                            }
+                    @{
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            <span class="text-white">
+                                Hello, @name !
+                            </span>
+
                         }
+                    }
+                    @*Account dropdown*@
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user text-white"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item"><b>@sessionUserName</b></a>
+                            <a class="dropdown-item" asp-controller="Purchase" asp-action="Index">My Purchase</a>
+                            <a class="dropdown-item" asp-controller="WishList" asp-action="Index">WishList</a>
+                            @{
+                                if (!string.IsNullOrEmpty(@sessionUserName))
+                                {
+                                    <a class="dropdown-item" asp-area="" asp-controller="LogIn" asp-action="Logout">Log Out</a>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item" asp-area="" asp-controller="LogIn" asp-action="Login">Log In</a>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <a class="fa fa-cart-shopping text-white mr-3" asp-controller="CheckOut" asp-action="Index" style="position:relative">
+                            <div id="here" style="position: absolute;top: -8px;right:-7px;">
+                                @{
+                                    if (string.IsNullOrEmpty(@cartcount))
+                                    {
+                                        <span class="badge badge-warning rounded-circle">0</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning rounded-circle">@cartcount</span>
+                                    }
+                                }
+                            </div>
+                        </a>
+                    </div>
 
-
-                    </a>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3" style="margin-top:90px;">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Henry's E-Shop
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/site.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

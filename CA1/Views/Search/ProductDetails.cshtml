@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Product Details";
+    Product product = ViewBag.Product;
+    double rating = ViewBag.Rating;
+    List<ProductReview> reviews = ViewBag.Reviews;
+    List<User> users = ViewBag.Users;
+    string boolean = (string)ViewBag.LoggedIn;
+    int percent = (int)(rating * 100 / 5);
+    List<Product> oos = ViewBag.OutOfStockItems;
+}
+
+@section Scripts {
+<script src="~/js/Home.js"></script>
+}
+<link rel="stylesheet" href="~/css/details.css" />
+
+<body>
+    <h2 class="p-3 border-bottom">@product.Name</h2>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                <img class="img-thumbnail border-0" src="../../@product.Img" height="400" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="d-flex justify-content-between">
+                    <p class="fs-3 product-desc pb-3">
+                        Description:<br />
+                        @product.Desc
+                    </p>
+                    <button type="button" class="fa-regular fa-heart wishlist-btn" value="@product.Id"></button>
+                </div>
+                <p class="d-flex justify-content-between pb-3">
+                    <strong class="product-price">
+                        Price: <br />
+                        $ @product.Price
+                    </strong>
+                    @if (!oos.Contains(product))
+                    {
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="@boolean" value="@product.Id">
+                            <span class="fa-solid fa-cart-arrow-down"></span> Add to Cart
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>
+                            <span class="fa-solid fa-square-xmark"></span> Out Of Stock
+                        </button>
+                    }
+
+                </p>
+
+                @if (reviews.Count <= 0)
+                {
+                    <h5>Product Ratings..</h5>
+                    <div class="p-2 border">
+                        There aren't any reviews for this product yet.
+                    </div>
+                }
+                else
+                {
+                    <h5>Product Ratings..</h5>
+                    <div class="rating d-flex border p-2 pb-3">
+                        <span class="stars mt-2" style="--w: @percent%;"></span>
+                        <span class="ml-5 rating-overview">
+                            AVG Rating: <span class="text-danger">@rating</span> out of 5 <br />
+                            Based On <span class="text-danger">@reviews.Count</span> reviews
+                        </span>
+                    </div>
+                    <h5 class="py-3">Customer Ratings:</h5>
+                    <div class="customer-rating border">
+                        @for (var i = 0; i < reviews.Count; i++)
+                        {
+                            <div class="container">
+                                <div class="row py-2 border-bottom">
+                                    <div class="col-3">
+                                        <img class="img-thumbnail" src="~/img/blank_Profile.png">
+                                    </div>
+                                    <div class="col">
+                                        <div class="stars" style="--w: @(reviews[i].Rating*100/5)%;"></div>
+                                        <p>
+                                            <u>@users[i].Firstname @users[i].Lastname</u> | @reviews[i].CreatedDate
+                                        </p>
+                                        @if (reviews[i].Content != "" && reviews[i].Content != null)
+                                        {
+                                            <span>
+                                                <strong>Comments:</strong><br>
+                                                @reviews[i].Content
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+@*modal form for login*@
+<form asp-controller="LogIn" asp-action="login" method="post">
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+            <div class="modal-content modal-sm" style="background-color:#f5f9fa;">
+
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" name="Username" class="form-control input_user" value="" placeholder="username">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input type="password" name="Password" class="form-control input_pass" value="" placeholder="password">
+                        <input type="hidden" name="returnUrl" value="Wishlist" />
+                    </div>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-primary" style="padding: 0.375rem 3.8rem;">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

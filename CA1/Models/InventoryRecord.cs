@@ -10,7 +10,7 @@ namespace CA1.Models
         public InventoryRecord()
         {
             Id = new Guid();
-            IsUsed = false;
+
         }
         public Guid Id { get; set; }
         public Guid ActivationId { get; set; }

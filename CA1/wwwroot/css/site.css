@@ -1,5 +1,15 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
+
+
+.henry-font {
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+}
+
+
 
 a.navbar-brand {
   white-space: normal;
@@ -24,10 +34,21 @@ a {
   border-color: #1861ac;
 }
 
+.rating-overview {
+    font-size:15px;
+}
+
+.product-desc, product-price {
+    font-size: 20px;
+}
+
+.search-btn:hover {
+    color: #6c757d !important;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
@@ -86,3 +107,103 @@ td, th {
     background-color: #f5fcff;
 }
 
+.carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+button span {
+    pointer-events: none;
+}
+/*5 star rating*/
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+
+    .rate:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+    }
+
+    .rate:not(:checked) > label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 30px;
+        color: #ccc;
+    }
+
+        .rate:not(:checked) > label:before {
+            content: '★ ';
+        }
+
+    .rate > input:checked ~ label {
+        color: #ffc700;
+    }
+
+    .rate:not(:checked) > label:hover,
+    .rate:not(:checked) > label:hover ~ label {
+        color: #deb217;
+    }
+
+    .rate > input:checked + label:hover,
+    .rate > input:checked + label:hover ~ label,
+    .rate > input:checked ~ label:hover,
+    .rate > input:checked ~ label:hover ~ label,
+    .rate > label:hover ~ input:checked ~ label {
+        color: #c59b08;
+    }
+
+
+.productdetails {
+    background: #fff;
+    padding: 15px;
+    border: 1px solid lightgray;
+    height: 530px;
+}
+
+
+.stars{
+    position: relative;
+    display: inline-block;
+    font-size: 20pt;
+    height: 1em;
+    line-height: 1em;
+}
+
+.stars:before {
+    content: "\2606\2606\2606\2606\2606";
+}
+
+.stars:after {
+        content: "\2605\2605\2605\2605\2605";
+        position: absolute;
+        left: 0;
+        overflow: hidden;
+        width: var(--w,50%);
+        color: rgb(255, 200, 0);
+        z-index: -1;
+}
+
+li {
+    display: table;
+}
+
+.productrow {
+    min-height: 400px;
+    height: 300px;   
+
+}
+
+.carttable td {
+    text-align: center;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    filter: invert(80%);
+}
