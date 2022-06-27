@@ -48,25 +48,19 @@ namespace CA1.Controllers
             string password = form["Password"];
             string message = string.Empty;
 
-            HashAlgorithm sha = SHA256.Create();
-
-            string combo = username + password;
-            byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(combo));
-
-
-
             User user = dbContext.Users.FirstOrDefault(x =>
                      x.UserName == username &&
-                     x.PassHash == hash
+                     x.PassHash == password
             );
 
 
-            if (user == null)
+
+            if (user == null && (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(password)))
             {
                 message = "Incorrect Username/Password";
             }
 
-            if (user != null) 
+            if (user != null && username == user.UserName && password == user.PassHash)
             {
                 user.sessionId = Guid.NewGuid();
                 dbContext.SaveChanges();
@@ -109,3 +103,4 @@ namespace CA1.Controllers
         }
     }
 }
+
